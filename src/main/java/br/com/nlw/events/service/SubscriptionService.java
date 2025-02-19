@@ -44,10 +44,17 @@ public class SubscriptionService {
             userRecuperado = userRepository.save(user);
         }
 
+        // Se o userId passado como parâmetro para esse metodo for diferente de null, ou seja, existe alguém que
+        // indicou, faço a busca no repositório, se na busca ele não exister lanço a exceção, porém se ele não existir
+        // ignoro tudo isso e o indicador continua sendo vazio
+        User indicador = null;
+
         // Verificando se o usuário indicador existe
-        User indicador = userRepository.findById(userId).orElse(null);
-        if (indicador == null) {
-            throw new UserIndicadorNotFoundException("Usuário " + userId + " indicador não existe.");
+        if (userId != null) {
+            indicador = userRepository.findById(userId).orElse(null);
+            if (indicador == null) {
+                throw new UserIndicadorNotFoundException("Usuário " + userId + " indicador não existe.");
+            }
         }
 
         // Atribuindo valores ao subscription
